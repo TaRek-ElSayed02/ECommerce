@@ -1,56 +1,77 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { fetchAllProducts } from "../slices/productsSlice";
+import { addFavorite, removeFavorite } from "../slices/favoriteProductSlice";
 import { addToCart } from "../slices/sliceCart";
-import axiosInstance from "../utils/axiosInstance";
-
-const fetchProducts = async () => {
-  const { data } = await axiosInstance.get("/products");
-  return data;
-};
-
+import { Link } from "react-router-dom";
 const Products = () => {
-  const dispatch = useDispatch();
-  const { data: products, isLoading, error } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
-  });
+    const products = useSelector((state) => state.products.products);
+    const favorites = useSelector((state) => state.favoriteProduct.favorites);
+    const dispatch = useDispatch();
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-  };
+    useEffect(() => {
+        dispatch(fetchAllProducts());
+    }, [dispatch]);
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
-  if (error) return <p className="text-center text-danger">Error fetching products</p>;
+    const handleAddToCart = (product) => {
+        dispatch(addToCart(product));
+    };
 
-  return (
-    <div className="container my-5">
-      <h2 className="text-center mb-4">Our Products</h2>
-      <div className="row">
-        {products.map((product) => (
-          <div key={product.id} className="col-md-4 mb-4">
-            <div className="card shadow-sm border-0 p-3 text-center" style={{ height: "100%" }}>
-              <Link to={`/products/${product.id}`} className="text-decoration-none text-dark">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="card-img-top img-fluid"
-                  style={{ height: "250px", objectFit: "contain" }}
-                />
-              </Link>
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title flex-grow-1">{product.title}</h5>
-                <p className="text-muted">${product.price}</p>
-                <button className="btn btn-primary mt-auto" onClick={() => handleAddToCart(product)}>
-                  Buy Now
-                </button>
-              </div>
+    const toggleFavorite = (product) => {
+        const isFavorite = favorites.some((item) => item.id === product.id);
+        if (isFavorite) {
+            dispatch(removeFavorite(product.id));
+        } else {
+            dispatch(addFavorite(product));
+        }
+    };
+
+    return (
+        <div className="container my-5">
+            <h2 className="text-center mb-4">Our Products</h2>
+            <div className="row">
+                {products.map((product) => {
+                    const isFavorite = favorites.some((item) => item.id === product.id);
+
+                    return (
+                        <div key={product.id} className="col-md-4 mb-4">
+                            <div className="card shadow-sm border-0 p-3 text-center" style={{ height: "100%" }}>
+                                <Link to={`/products/${product.id}`} className="text-decoration-none text-dark">
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+                                        className="card-img-top img-fluid"
+                                        style={{ height: "250px", objectFit: "contain" }}
+                                    />
+                                </Link>
+                                <div className="card-body p-0 mt-3">
+                                    <h5 className="card-title">{product.title}</h5>
+                                    <p className="card-text">${product.price}</p>
+                                    <div className="d-flex justify-content-between">
+                                        {/* Add to Cart Button */}
+                                        <button className="btn btn-primary" onClick={() => handleAddToCart(product)}>
+                                            Add to Cart
+                                        </button>
+
+                                        {/* Favorite Toggle Button */}
+                                        <button
+                                            className={`btn ${isFavorite ? "btn-danger" : "btn-outline-danger"}`}
+                                            onClick={() => toggleFavorite(product)}
+                                        >
+                                            {isFavorite ? "❤️ Remove" : "🤍 Add Favorite"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
+
+
 
 export default Products;

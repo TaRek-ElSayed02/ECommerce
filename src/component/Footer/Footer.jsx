@@ -8,7 +8,7 @@ const Footer = () => {
         theme === "light" ? "bg-secondary text-white" : "bg-black text-light"
       }`}
     >
-      <p className="mb-1 fw-semibold">© {new Date().getFullYear()} Tarek. All Rights Reserved.</p>
+      <p className="mb-1 fw-semibold">Tarek. All Rights Reserved © 2025</p>
     </footer>
   );
 };

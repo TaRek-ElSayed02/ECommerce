@@ -3,6 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../utils/axiosInstance";
 import { FaStar, FaShoppingCart } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../slices/sliceCart";
+
 
 const fetchProductById = async (id) => {
   const { data } = await axiosInstance.get(`/products/${id}`);
@@ -23,8 +26,14 @@ const ProductDetails = () => {
     enabled: !!id,
   });
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading) return <p className="text-center"></p>;
   if (error) return <p className="text-center text-danger">Error fetching product</p>;
+
+  const dispatch = useDispatch();
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
+
 
   return (
     <div className="container my-5">
@@ -55,7 +64,7 @@ const ProductDetails = () => {
 
           {/* Buttons */}
           <div className="mt-4">
-            <button className="btn btn-primary me-3">
+            <button className="btn btn-primary me-3" onClick={() => handleAddToCart(product)}>
               <FaShoppingCart className="me-2" />
               Add to Cart
             </button>
