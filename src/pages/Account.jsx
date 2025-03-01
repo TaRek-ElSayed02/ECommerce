@@ -2,8 +2,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../slices/authSlice.js";
 import { useNavigate } from "react-router-dom";
-import "./Account.css";
-//it should be right
+import "../styles/Account.css";
+//it should be right  s
 
 const Account = () => {
   const dispatch = useDispatch();
