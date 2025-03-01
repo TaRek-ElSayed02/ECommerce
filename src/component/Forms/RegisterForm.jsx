@@ -21,9 +21,10 @@ const RegistrationForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      await dispatch(fetchRegister(data)).unwrap();
+      const result = await dispatch(fetchRegister(data)).unwrap();
+      console.log("Registration result:", result);
       setSuccessMessage("Registration successful! You can now log in.");
-      reset(); // Clear form fields
+      reset();
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -63,10 +64,7 @@ const RegistrationForm = () => {
                 placeholder="Enter your username"
                 {...register("username", {
                   required: "Username is required",
-                  minLength: {
-                    value: 5,
-                    message: "Username must be at least 5 characters",
-                  },
+                  minLength: { value: 5, message: "Must be at least 5 characters" },
                 })}
               />
               {errors.username && <div className="invalid-feedback">{errors.username.message}</div>}
@@ -78,13 +76,9 @@ const RegistrationForm = () => {
                 type="password"
                 className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 id="inputPassword"
-                placeholder="Enter your password"
                 {...register("password", {
                   required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
+                  minLength: { value: 6, message: "Must be at least 6 characters" },
                 })}
               />
               {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
@@ -92,20 +86,10 @@ const RegistrationForm = () => {
 
             {registerError && <div className="alert alert-danger">{registerError}</div>}
 
-            <button type="submit" className="btn w-100" style={{ backgroundColor: "#008080", color: "white", borderRadius: "30px", paddingBlock: "15px" }}>
-              Sign Up
-            </button>
+            <button type="submit" className="btn btn-primary w-100">Sign Up</button>
           </form>
         </div>
       </div>
-
-      {/* Success Toast Message */}
-      <ToastContainer position="top-center" className="p-3">
-        <Toast show={!!successMessage} onClose={() => setSuccessMessage("")} delay={3000} autohide bg="success">
-          <Toast.Body className="text-white">{successMessage}</Toast.Body>
-        </Toast>
-      </ToastContainer>
-
       <Footer />
     </div>
   );

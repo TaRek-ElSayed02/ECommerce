@@ -10,10 +10,8 @@ export const fetchLogin = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       const response = await axiosInstance.get(`/users?email=${user.email}`);
-      if (response.data.length === 0) {
-        throw new Error("Invalid credentials");
-      }
-      if (response.data[0].password !== user.password) {
+
+      if (response.data.length === 0 || response.data[0].password !== user.password) {
         throw new Error("Invalid credentials");
       }
 
@@ -30,6 +28,7 @@ export const fetchLogin = createAsyncThunk(
 
       return response.data[0];
     } catch (error) {
+      console.error("Login failed:", error.message);
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -39,16 +38,25 @@ export const fetchRegister = createAsyncThunk(
   "auth/register",
   async (user, thunkApi) => {
     try {
-      // Check if the email already exists
+      console.log("Registering user:", user);
+
+      // Check if user already exists
       const checkUser = await axiosInstance.get(`/users?email=${user.email}`);
       if (checkUser.data.length > 0) {
         throw new Error("This user already exists");
       }
 
-      // Proceed with registration
-      const response = await axiosInstance.post("/users", user);
+      // Register new user
+      const response = await axiosInstance.post(
+        "/users",
+        user,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Registration successful:", response.data);
       return response.data;
     } catch (error) {
+      console.error("Registration failed:", error.response ? error.response.data : error.message);
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -59,13 +67,14 @@ export const fetchLoggedInUser = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const token = localStorage.getItem("token");
-      if (token) {
-        const { payload } = await jose.jwtVerify(token, jwtKey);
+      if (!token) throw new Error("No token found");
 
-        const response = await axiosInstance.get(`/users/${payload.id}`);
-        return response.data;
-      }
+      const { payload } = await jose.jwtVerify(token, jwtKey);
+
+      const response = await axiosInstance.get(`/users/${payload.id}`);
+      return response.data;
     } catch (error) {
+      console.error("Fetching logged-in user failed:", error.message);
       return thunkApi.rejectWithValue(error.message);
     }
   }
