@@ -42,8 +42,8 @@ const Header = () => {
           </Nav>
 
           {/* Theme & Language Dropdown */}
-          <div className="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <Dropdown as={ButtonGroup} align="end">
+          <div className="d-flex align-items-center gap-3 mt-3 mt-lg-0 ms-5">
+            <Dropdown as={ButtonGroup} align="start">
               <Dropdown.Toggle variant="white" className="text-secondary fw-bold">
                 More
               </Dropdown.Toggle>
