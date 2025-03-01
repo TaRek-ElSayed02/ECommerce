@@ -15,6 +15,7 @@ const Account = () => {
     return null;
   }
 
+  /*this is anything*/ 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
