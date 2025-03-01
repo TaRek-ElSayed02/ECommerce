@@ -14,7 +14,7 @@ const LoginForm = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, loginError } = useSelector((state) => state.auth); 
+    const { user, loginError } = useSelector((state) => state.auth);
 
     // Redirect to /account when logged in
     useEffect(() => {
@@ -46,53 +46,49 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="class-container">
+        <div className="login-container">
             <Header />
-        <div className="form-container" style={{ marginBlock:"70px",width:"33%"}}>
-            <p className="title">Welcome back</p>
-            <form onSubmit={handleSubmit} className="form">
-              <label htmlFor="inputEmail" className="form-label" style={{margin:"0" ,marginLeft:"5px"}}>Email</label>
+            <div  className="form-wrapper">
+                <p className="title">Welcome back</p>
+                <form onSubmit={handleSubmit} className="form">
+                    <label htmlFor="inputEmail" className="form-label">Email</label>
+                    <input
+                        type="email"
+                        className="input"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    {errors.email && <p className="error text-danger">{errors.email}</p>}
 
-                <input
-                    type="email"
-                    className="input"
-                    placeholder="Email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                {errors.email && <p className="error text-danger">{errors.email}</p>}
+                    <label htmlFor="inputPassword" className="form-label">Password</label>
+                    <input
+                        type="password"
+                        className="input"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {errors.password && <p className="error text-danger">{errors.password}</p>}
 
-              <label htmlFor="inputPassword" className="form-label" style={{margin:"0" ,marginLeft:"5px"}}>Password</label>
+                    {successMessage && <p className="text-success">{successMessage}</p>}
+                    {errors.api && <p className="error text-danger">{errors.api}</p>}
+                    {loginError && <p className="error text-danger">{loginError}</p>}
 
-                <input
-                    type="password"
-                    className="input"
-                    placeholder="Password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                {errors.password && <p className="error text-danger">{errors.password}</p>}
+                    <p className="page-link">
+                        <span className="page-link-label">Forgot Password?</span>
+                    </p>
+                    <button className="form-btn">Log in</button>
+                </form>
 
-                {successMessage && <p className="text-success">{successMessage}</p>}
-                {errors.api && <p className="error text-danger">{errors.api}</p>}
-                {loginError && <p className="error text-danger">{loginError}</p>}
-
-                <p className="page-link">
-                    <span className="page-link-label">Forgot Password?</span>
+                <p className="sign-up-label">
+                    Don't have an account?{" "}
+                    <span className="sign-up-link" onClick={() => navigate("/register")}>
+                        Sign up
+                    </span>
                 </p>
-                <button className="form-btn" >Log in</button>
-            </form>
-
-            <p className="sign-up-label">
-                Don't have an account?{" "}
-                <span className="sign-up-link" onClick={() => navigate("/register")}>
-                    Sign up
-                </span>
-            </p>
-        </div>
-        <Footer />
+            </div>
+            <Footer />
         </div>
     );
 };

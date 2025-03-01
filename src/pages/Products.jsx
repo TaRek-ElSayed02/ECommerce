@@ -30,7 +30,7 @@ const Products = () => {
     return (
         <div className="container my-5">
             <h2 className="text-center mb-4">Our Products</h2>
-            <div className="row">
+            <div className="row" >
                 {products.map((product) => {
                     const isFavorite = favorites.some((item) => item.id === product.id);
 

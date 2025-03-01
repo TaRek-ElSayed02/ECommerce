@@ -1,25 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./form.module.css";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRegister } from "../../slices/authSlice.js";
 import Footer from "../Footer/Footer.jsx";
 import Header from "../Header/Header.jsx";
-import { Toast } from "react-bootstrap";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
   const { registerError } = useSelector((state) => state.auth);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    dispatch(fetchRegister(data));
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(fetchRegister(data)).unwrap();
+      setSuccessMessage("Registration successful! You can now log in.");
+      reset(); // Clear form fields
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
+
   return (
     <div>
       <Header />
@@ -83,10 +92,20 @@ const RegistrationForm = () => {
 
             {registerError && <div className="alert alert-danger">{registerError}</div>}
 
-            <button type="submit" className="btn w-100" style={{ backgroundColor: "#008080", color: "white", borderRadius:"30px",paddingBlock:"15px" }}>Sign Up</button>
+            <button type="submit" className="btn w-100" style={{ backgroundColor: "#008080", color: "white", borderRadius: "30px", paddingBlock: "15px" }}>
+              Sign Up
+            </button>
           </form>
         </div>
       </div>
+
+      {/* Success Toast Message */}
+      <ToastContainer position="top-center" className="p-3">
+        <Toast show={!!successMessage} onClose={() => setSuccessMessage("")} delay={3000} autohide bg="success">
+          <Toast.Body className="text-white">{successMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <Footer />
     </div>
   );

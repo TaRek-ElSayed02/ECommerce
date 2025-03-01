@@ -140,3 +140,41 @@
   font-size: 12px;
   margin: 0;  
 }
+
+
+
+.form-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 30%;
+  margin: auto;
+  height: 75.3vh;
+  margin-top: 50px;
+}
+
+
+
+@media screen and (max-width:768px) {
+  .form-wrapper{
+    width: 50%;
+    height: 80vh;
+    margin-top:0px !important;
+  }
+
+}
+
+@media screen and (max-width:480px) {
+  .form-wrapper{
+    width: 80%;
+    height: 80vh;
+    margin-top:0px !important;
+  }
+  
+}
+
+
+
+/***********************************/
+
+

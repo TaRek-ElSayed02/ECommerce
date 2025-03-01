@@ -1,0 +1,72 @@
+/* Main Container */
+.account-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+/* Account Card */
+.account-card {
+    width: 100%;
+    max-width: 550px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Username */
+.username {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Email */
+.email {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+/* Logout Button */
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .account-card {
+        max-width: 90%;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .username {
+        font-size: 1.2rem;
+    }
+
+    .email {
+        font-size: 0.9rem;
+    }
+
+    .logout-btn {
+        font-size: 0.9rem;
+    }
+}
